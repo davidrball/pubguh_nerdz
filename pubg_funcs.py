@@ -15,8 +15,7 @@ def return_recent_matches(user, region):
     URL = "https://api.playbattlegrounds.com/shards/"+region+"/players?filter[playerNames]="+user
     #print(URL)
     header = {
-    "Authorization" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0NWI0NTNkMC0xOGRjLTAxMzYtNmZmMS01NWRjYjUxYTg4ZWIiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTIyNjk4MzA4LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImRhdnlqb25lcyIsInNjb3BlIjoiY29tbXVuaXR5IiwibGltaXQiOjEwfQ.lEZbaG1KelIytpxmhPGjGvCiegV5WY48QzloJIPo1xg",
-    "Accept" : "application/vnd.api+json"}
+    "Authorization" : "<auth_key>"}
     
     r = requests.get(URL,headers=header) #comment out when the IDE already has this info saved just for testing
 
