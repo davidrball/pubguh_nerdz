@@ -6,7 +6,7 @@ Created on Tue Apr  3 14:32:39 2018
 """
 import requests
 import numpy as np
-
+import json
 #a collection of functions that may be useful to call in later code
 
 #return the data for a specific player, should only be called once, returns the data structure with everything you need, but you can only grab the pubg data a limited number of 10 times / min
@@ -65,6 +65,29 @@ def return_match_data(region, match_id):
     return r
 
 match_r = return_match_data(myregion, match_list[0])
+match_json = match_r.json()
+matchtxt = match_r.text
+
+
+def save_match_data(r):
+    #given the request file from the match data, save a text file, name by the match id
+    r_json = r.json()    
+    match_id = r_json['data']['id'] #find the match id
+    
+    s = json.dumps(r_json)
+    with open('match_data/'+match_id +'.txt','w') as f:
+        f.write(s)
+    
+save_match_data(match_r)
+
+#testdict = {'key' : 'value'}
+#s = json.dumps(match_json)
+#testing writing data
+#with open('match_data/testing.txt.','w') as f:
+#    f.write(s)
+
+
+
 #data from match of most recent game played by user
     
 def return_tel_ID_URL(r): 
@@ -100,4 +123,7 @@ def return_tel_ID_URL(r):
     print(telemetry_URL)#this is the link to the telemetry URL you want
     return telemetry_URL, tel_id
     
-return_tel_ID_URL(match_r) 
+#on deck: write a function to save data, so that if 
+
+
+
