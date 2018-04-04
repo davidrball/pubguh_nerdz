@@ -16,14 +16,14 @@ myregion = 'pc-na'
 
 r_player = return_player_data(myuser,myregion)
 match_list = return_recent_matches(r_player)
-print(match_list)
+#print(match_list)
 
 #loop through matches and grab data
 
 data_list = []
-numgames = 4
-#for i in range(0,numgames): #for a subset of games
-for i in range(len(match_list)): # for all games
+numgames = 5
+for i in range(0,numgames): #for a subset of games
+#for i in range(len(match_list)): # for all games
     match_id = match_list[i]
     tmpr = return_match_data('pc-na',match_id).json()
     tmpr = tmpr['included']
