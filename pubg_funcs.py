@@ -8,6 +8,7 @@ import requests
 import numpy as np
 import json
 #a collection of functions that may be useful to call in later code
+#let's limit this file to functions that extract data, make another file for statistical analysis, etc.
 
 #return the data for a specific player, should only be called once, returns the data structure with everything you need, but you can only grab the pubg data a limited number of 10 times / min
 def return_player_data(user,region):
@@ -43,15 +44,15 @@ def return_recent_matches(r):
         match_list.append(match['id'])
     return(match_list) #returns list of match ID's, which we should be able to query the matches to get actual info.  in order from most recent [0] to least recent, not sure how many games it stores
 #e.g.,
-myuser = "Lilbill246" #careful, it's case sensitive
-myregion = "pc-na"
-r = return_player_data(myuser,myregion)
-match_list = return_recent_matches(r) 
+#myuser = "Lilbill246" #careful, it's case sensitive
+#myregion = "pc-na"
+#r = return_player_data(myuser,myregion)
+#match_list = return_recent_matches(r) 
 #print(match_list)
     
 #return the ID for the telemtry from the request file
     
-def return_match_data(region, match_id):
+def return_match_data(region, match_id): #grabbing data from online
     URL = 'https://api.playbattlegrounds.com/shards/'+region+'/matches/'+match_id
 
     #print(URL)
@@ -64,9 +65,9 @@ def return_match_data(region, match_id):
     r = requests.get(URL,headers=header) #comment out when the IDE already has this info saved just for testing
     return r
 
-match_r = return_match_data(myregion, match_list[0])
-match_json = match_r.json()
-matchtxt = match_r.text
+#match_r = return_match_data(myregion, match_list[0])
+#match_json = match_r.json()
+#matchtxt = match_r.text
 
 
 def save_match_data(r):
@@ -77,16 +78,23 @@ def save_match_data(r):
     s = json.dumps(r_json)
     with open('match_data/'+match_id +'.txt','w') as f:
         f.write(s)
+ 
+def load_match_data(match_id): #for loading data from a local file
+    with open('match_data/'+match_id + '.txt','r') as f:
+        content = json.load(f)
+    return content
     
-save_match_data(match_r)
+def find_match_data(region,match_id): #use this when trying to load a file if you have a store of files locally
+    #first, look in our local files for the match
+    try: 
+        return load_match_data(match_id)
+        print('file found locally')
+    except:
+        print('downloading...')
+        return return_match_data(region,match_id)
 
-#testdict = {'key' : 'value'}
-#s = json.dumps(match_json)
-#testing writing data
-#with open('match_data/testing.txt.','w') as f:
-#    f.write(s)
-
-
+#match_json = load_match_data('6ffdb07f-026e-439d-80ca-27eb54e253a1')
+#save_match_data(match_r)
 
 #data from match of most recent game played by user
     
