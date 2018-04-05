@@ -44,11 +44,15 @@ def return_recent_matches(r):
         match_list.append(match['id'])
     return(match_list) #returns list of match ID's, which we should be able to query the matches to get actual info.  in order from most recent [0] to least recent, not sure how many games it stores
 #e.g.,
-#myuser = "Lilbill246" #careful, it's case sensitive
+    
+    
+#myuser = "shroud" #careful, it's case sensitive
 #myregion = "pc-na"
 #r = return_player_data(myuser,myregion)
 #match_list = return_recent_matches(r) 
 #print(match_list)
+
+
     
 #return the ID for the telemtry from the request file
     
@@ -79,6 +83,9 @@ def save_match_data(r):
     with open('match_data/'+match_id +'.txt','w') as f:
         f.write(s)
  
+ 
+ 
+ 
 def load_match_data(match_id): #for loading data from a local file
     with open('match_data/'+match_id + '.txt','r') as f:
         content = json.load(f)
@@ -95,7 +102,7 @@ def find_match_data(region,match_id): #use this when trying to load a file if yo
 
 #match_json = load_match_data('6ffdb07f-026e-439d-80ca-27eb54e253a1')
 #save_match_data(match_r)
-
+#find_match_data('pc-na','6ffdb07f-026e-439d-80ca-27eb54e253a1')
 #data from match of most recent game played by user
     
 def return_tel_ID_URL(r): 
