@@ -176,6 +176,7 @@ def save_tel_data(r,tel_id):
 def load_tel_data(tel_id): #for loading data from a local file
     with open('tel_data/'+tel_id + '.txt','r') as f:
         content = json.load(f) 
+    print("File found locally")
     return content
 
 def find_tel_data(tel_ID, tel_URL): #use this when trying to load a file if you have a store of files locally
