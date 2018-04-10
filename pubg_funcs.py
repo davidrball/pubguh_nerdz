@@ -69,6 +69,10 @@ def return_match_data(region, match_id): #grabbing data from online
     r = requests.get(URL,headers=header) #comment out when the IDE already has this info saved just for testing
     return r
 
+def return_match_json(region,match_id): #in some cases you want to return the json file directly, not the request file
+    r = return_match_data(region, match_id)
+    return r.json()
+
 #match_r = return_match_data(myregion, match_list[0])
 #match_json = match_r.json()
 #matchtxt = match_r.text
@@ -83,12 +87,23 @@ def save_match_data(r):
     with open('match_data/'+match_id +'.txt','w') as f:
         f.write(s)
  
- 
+
+def save_user_matches(myregion,myuser):
+    #will save the most recent X number of a users games, where X is however many you can download given your current rate limit
+    r = return_player_data(myuser,myregion)
+    match_list = return_recent_matches(r) 
+    #print(match_list)
+
+    for match_id in match_list:
+        r = return_match_data('pc-na',match_id)
+        save_match_data(r)
+        print(match_id + " saved")
+
  
  
 def load_match_data(match_id): #for loading data from a local file
     with open('match_data/'+match_id + '.txt','r') as f:
-        content = json.load(f)
+        content = json.load(f) 
     return content
     
 def find_match_data(region,match_id): #use this when trying to load a file if you have a store of files locally
@@ -98,12 +113,15 @@ def find_match_data(region,match_id): #use this when trying to load a file if yo
         print('file found locally')
     except:
         print('downloading...')
-        return return_match_data(region,match_id)
+        return return_match_json(region,match_id)
 
 #match_json = load_match_data('6ffdb07f-026e-439d-80ca-27eb54e253a1')
 #save_match_data(match_r)
 #find_match_data('pc-na','6ffdb07f-026e-439d-80ca-27eb54e253a1')
 #data from match of most recent game played by user
+
+
+
     
 def return_tel_ID_URL(r): 
     json = r.json()
@@ -137,8 +155,34 @@ def return_tel_ID_URL(r):
     telemetry_URL = substr[substr_start+6:substr_end+5] #the +6 and 5 are just to clip off what should be standard formatting of spaces, colons, and "s
     print(telemetry_URL)#this is the link to the telemetry URL you want
     return telemetry_URL, tel_id
+
+
+
+def return_tel_data(URL):
     
-#on deck: write a function to save data, so that if 
+    header = {
+    "Accept" : "application/vnd.api+json"
+    }
+    r = requests.get(URL,headers=header) #comment out when the IDE already has this info saved just for testing
+    return r
 
+def save_tel_data(r,tel_id):
+    r_json = r.json()    
+    #match_id = r_json['data']['id'] #find the match id
+    
+    s = json.dumps(r_json)
+    with open('tel_data/'+tel_id +'.txt','w') as f:
+        f.write(s)
+def load_tel_data(tel_id): #for loading data from a local file
+    with open('tel_data/'+tel_id + '.txt','r') as f:
+        content = json.load(f) 
+    return content
 
-
+def find_tel_data(tel_ID, tel_URL): #use this when trying to load a file if you have a store of files locally
+    #first, look in our local files for the match
+    try: 
+        return load_tel_data(tel_ID)
+        print('file found locally')
+    except:
+        print('downloading...')
+        return return_tel_data(tel_URL)
